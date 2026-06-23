@@ -1,0 +1,59 @@
+# Claude Code
+.claude/work_in_progress.md
+.claude/exports/
+.claude/.env
+.claude/.env.local
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+
+# Testing
+coverage/
+.nyc_output/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Salesforce
+.sfdx/
+.sf/
+
+# Personal notes (not for version control)
+NOTES.md
+TODO.md
+SCRATCH.md

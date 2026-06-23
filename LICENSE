@@ -1,0 +1,41 @@
+Copyright (c) 2026 Michael Malling / Salesforce
+
+PROPRIETARY SOFTWARE LICENSE
+
+This software and associated documentation files (the "Software") are proprietary
+and confidential to Salesforce and its licensors.
+
+TERMS AND CONDITIONS:
+
+1. GRANT OF LICENSE
+   Subject to the terms of this license, you are granted a limited, non-exclusive,
+   non-transferable license to use the Software solely for internal Salesforce
+   business purposes.
+
+2. RESTRICTIONS
+   You may not:
+   - Distribute, sublicense, or transfer the Software to any third party
+   - Use the Software for any purpose outside of Salesforce internal operations
+   - Remove or alter any proprietary notices in the Software
+   - Reverse engineer, decompile, or disassemble the Software
+
+3. CONTRIBUTIONS
+   Any contributions made to this Software become the property of Salesforce
+   and are subject to the terms of this license.
+
+4. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+5. LIMITATION OF LIABILITY
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+   DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+   USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+6. INTELLECTUAL PROPERTY
+   All right, title, and interest in and to the Software, including all
+   intellectual property rights, remain with Salesforce and its licensors.
+
+For questions regarding this license, contact the Salesforce Solution Architecture team.

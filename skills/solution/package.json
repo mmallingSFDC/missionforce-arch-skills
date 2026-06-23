@@ -20,12 +20,12 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/salesforce-internal/[your-repo]"
+    "url": "https://github.com/mmallingSFDC/missionforce-arch-skills"
   },
   "bugs": {
-    "url": "https://github.com/salesforce-internal/[your-repo]/issues"
+    "url": "https://github.com/mmallingSFDC/missionforce-arch-skills/issues"
   },
-  "homepage": "https://github.com/salesforce-internal/[your-repo]#readme",
+  "homepage": "https://github.com/mmallingSFDC/missionforce-arch-skills#readme",
   "engines": {
     "node": ">=16.0.0"
   },

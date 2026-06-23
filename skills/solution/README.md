@@ -2,6 +2,11 @@
 
 A reusable Claude Code skill for designing Salesforce solutions grounded in authoritative Salesforce Knowledge Base guidance.
 
+[![GitHub](https://img.shields.io/badge/GitHub-missionforce--arch--skills-blue?logo=github)](https://github.com/mmallingSFDC/missionforce-arch-skills)
+[![Version](https://img.shields.io/badge/version-1.0.0-green)](https://github.com/mmallingSFDC/missionforce-arch-skills/releases)
+
+**Repository**: [https://github.com/mmallingSFDC/missionforce-arch-skills](https://github.com/mmallingSFDC/missionforce-arch-skills)
+
 ## What It Does
 
 This skill helps you design comprehensive Salesforce solutions by:
@@ -375,20 +380,133 @@ Create specialized versions:
 
 ## License
 
-[Specify license - MIT, Apache 2.0, Proprietary, etc.]
+This skill is proprietary and intended for internal Salesforce use only.
 
 ## Contributing
 
-[Instructions for contributing improvements to the skill]
+We welcome contributions to improve this skill! Here's how to contribute:
+
+### Getting Started
+
+1. **Fork the repository**:
+   ```bash
+   # Fork via GitHub UI, then clone your fork
+   git clone https://github.com/YOUR-USERNAME/missionforce-arch-skills.git
+   cd missionforce-arch-skills
+   ```
+
+2. **Create a feature branch**:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Make your changes**:
+   - Edit `skills/solution/skill.md` for agent instructions
+   - Update `skills/solution/README.md` for user documentation
+   - Add entries to `skills/solution/CHANGELOG.md`
+
+4. **Test your changes**:
+   ```bash
+   # Test the skill locally
+   /solution
+   # Or invoke via Claude Code in a test project
+   ```
+
+5. **Commit with clear messages**:
+   ```bash
+   git add .
+   git commit -m "feat: add support for Data Cloud solution patterns"
+   ```
+
+6. **Push and create a Pull Request**:
+   ```bash
+   git push origin feature/your-feature-name
+   # Then create PR via GitHub UI
+   ```
+
+### Contribution Guidelines
+
+**What to Contribute**:
+- 🆕 New solution patterns or architecture guidance
+- 📚 Additional KB search strategies
+- 🐛 Bug fixes or error handling improvements
+- 📝 Documentation improvements or examples
+- 🔧 Installation or setup improvements
+- ✨ New features (e.g., specialized variants)
+
+**Contribution Standards**:
+- **KB-Grounded**: All solution guidance must reference KB atoms
+- **Tested**: Test changes with real Salesforce questions
+- **Documented**: Update README and CHANGELOG
+- **Clear Commit Messages**: Use conventional commits format
+  - `feat:` - New features
+  - `fix:` - Bug fixes
+  - `docs:` - Documentation updates
+  - `refactor:` - Code refactoring
+  - `test:` - Test additions/updates
+  - `chore:` - Maintenance tasks
+
+**Code Review Process**:
+1. Submit PR with clear description of changes
+2. Maintainers will review within 2-3 business days
+3. Address any feedback or requested changes
+4. PR will be merged once approved
+
+### Reporting Issues
+
+Found a bug or have a feature request?
+
+1. **Search existing issues**: Check if already reported
+2. **Create a new issue**: [GitHub Issues](https://github.com/mmallingSFDC/missionforce-arch-skills/issues)
+3. **Provide details**:
+   - Clear description of the issue
+   - Steps to reproduce (for bugs)
+   - Expected vs. actual behavior
+   - Claude Code version
+   - KB MCP server version
+   - Relevant error messages or logs
+
+### Feature Requests
+
+Have an idea for improvement?
+
+1. **Open an issue** with `[Feature Request]` prefix
+2. **Describe the use case**: What problem does it solve?
+3. **Propose a solution**: How would it work?
+4. **Consider alternatives**: What other approaches exist?
+
+### Development Setup
+
+For local development:
+
+```bash
+# Clone the repository
+git clone https://github.com/mmallingSFDC/missionforce-arch-skills.git
+cd missionforce-arch-skills
+
+# Install as a local skill
+ln -s "$(pwd)/skills/solution" ~/.claude/skills/solution
+
+# Test changes immediately in Claude Code
+/solution
+```
 
 ## Support
 
-For issues or questions:
+For issues, questions, or discussions:
 
-- Internal Salesforce: [Slack channel / mailing list]
-- GitHub Issues: [If published to GitHub]
+- **GitHub Issues**: [Report bugs or request features](https://github.com/mmallingSFDC/missionforce-arch-skills/issues)
+- **Pull Requests**: [Contribute improvements](https://github.com/mmallingSFDC/missionforce-arch-skills/pulls)
+- **Internal Salesforce**: Contact Solution Architecture team
+
+## Acknowledgments
+
+- Built for Claude Code by Anthropic
+- Powered by Salesforce Knowledge Base MCP server
+- Integrates with `/grill-me` skill by Matt Pocock
 
 ---
 
-**Maintained by**: [Your Name/Team]
-**Last Updated**: 2026-06-22
+**Repository**: [https://github.com/mmallingSFDC/missionforce-arch-skills](https://github.com/mmallingSFDC/missionforce-arch-skills)  
+**Maintained by**: Michael Malling / Salesforce Solution Architects  
+**Last Updated**: 2026-06-23

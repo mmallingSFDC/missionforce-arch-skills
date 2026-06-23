@@ -55,6 +55,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Updated repository URL to `https://github.com/mmallingSFDC/missionforce-arch-skills`
+- Enhanced README with repository badges and metadata
+- Added comprehensive contribution guidelines
+- Updated package.json with correct repository information
+
+### Added
+- Root-level README.md for repository overview
+- CONTRIBUTING.md with detailed contribution workflow
+- LICENSE file for proprietary software
+
 ### Planned
 - Integration with additional MCP servers (if available)
 - Specialized variants (mobile-focused, integration-focused, data-cloud-focused)

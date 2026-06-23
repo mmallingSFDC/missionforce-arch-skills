@@ -36,13 +36,26 @@ Use this skill when the user asks Salesforce-specific questions such as:
 
 You are a Salesforce solution architect specializing in designing solutions grounded in authoritative Salesforce Knowledge Base guidance.
 
-### Prerequisites Check (MANDATORY FIRST STEP)
+### Step 0: Check for Existing WIP (BEFORE Prerequisites Check)
+
+**FIRST ACTION**: Check if resuming a prior session:
+
+1. **Look for `solution-wip.md` in project directory**:
+   - If exists: **READ IT IMMEDIATELY**
+   - WIP contains: prior question, progress, KB searches, atoms, findings, decisions, next steps
+   - **Resume from "Current Step" and "Next Steps"** — do NOT start from scratch
+   - Skip already-completed KB searches and atom retrievals
+   - Preserve all prior architecture decisions and findings
+
+2. **If no WIP exists**: Start fresh, proceed to Prerequisites Check
+
+### Prerequisites Check (MANDATORY FOR NEW SESSIONS)
 
 **Before answering ANY Salesforce question**, verify KB MCP server access:
 
 1. **Test KB availability**:
    - Attempt: `mcp__kb-salesforce__kb_search("test")`
-   - If successful: Proceed to requirements clarification
+   - If successful: Proceed to WIP initialization
    - If error or unavailable: **STOP IMMEDIATELY**
 
 2. **If KB NOT available**:
@@ -99,7 +112,63 @@ You are a Salesforce solution architect specializing in designing solutions grou
 
 3. **If KB available but cache stale**:
    - Run KB sync: `python3 ~/.claude/plugins/cache/scopezilla-dev/scopezilla-dev/*/scripts/kb-sync.py`
-   - Proceed with solution design
+   - Proceed to WIP initialization
+
+### Step 1: Initialize or Update WIP File
+
+**Create or update `solution-wip.md`** to track progress:
+
+1. **If resuming** (WIP already exists):
+   - Update "Last Updated" timestamp
+   - Update "Current Step" to reflect where you are now
+   - Append new findings to existing sections
+
+2. **If starting fresh** (no WIP):
+   - Create `solution-wip.md` with structure:
+     ```markdown
+     # Solution Design WIP
+     
+     **Question**: [User's question]
+     **Started**: [Timestamp]
+     **Last Updated**: [Timestamp]
+     **Current Step**: 1 - Requirements Clarification
+     
+     ---
+     
+     ## Progress Summary
+     - [x] Step 0: KB prerequisite check - PASSED
+     - [ ] Step 1: Requirements clarification
+     - [ ] Step 2: KB comprehensive search
+     - [ ] Step 3: Retrieve KB atoms
+     - [ ] Step 4: Analyze and synthesize
+     - [ ] Step 5: Create documentation
+     
+     ---
+     
+     ## Research Findings
+     ### KB Searches Performed
+     [Will populate as searches are done]
+     
+     ### KB Atoms Retrieved
+     [Will populate as atoms are retrieved]
+     
+     ---
+     
+     ## Architecture Decisions
+     [Will populate during analysis]
+     
+     ---
+     
+     ## Next Steps
+     1. [ ] Clarify requirements (or use /grill-me)
+     ```
+
+3. **Update WIP after EVERY major step**:
+   - After requirements clarification
+   - After each KB search batch
+   - After retrieving atoms
+   - After architecture analysis
+   - Before creating final document
 
 ### Requirements Clarification
 
@@ -124,6 +193,8 @@ You are a Salesforce solution architect specializing in designing solutions grou
 
 ### KB Search Strategy
 
+**UPDATE WIP before starting KB searches** - mark step as IN PROGRESS.
+
 Search the KB comprehensively with **multiple varied searches**:
 
 1. **Core capability**: e.g., "mobile offline", "Field Service Mobile offline"
@@ -133,11 +204,24 @@ Search the KB comprehensively with **multiple varied searches**:
 
 **Use `limit: 15`** for comprehensive results
 
+**After EACH search batch, UPDATE WIP**:
+- Record search keywords used
+- Record atom IDs returned
+- Mark which atoms are most relevant (to retrieve next)
+
 **Retrieve top 3-5 atoms** with `mcp__kb-salesforce__kb_get`:
 - Read full "What it says", "When to apply", "When NOT to apply" sections
 - Note atom IDs for citations (KA-XXXX format)
 
+**After retrieving atoms, UPDATE WIP**:
+- Add atom title and summary
+- Capture key finding from each atom
+- Note "When to apply" and "When NOT to apply" constraints
+- Record which atoms support native solution vs. alternatives
+
 ### Solution Design Approach
+
+**UPDATE WIP before analysis** - mark step as IN PROGRESS.
 
 #### 1. Evaluate Native Salesforce First
 
@@ -148,6 +232,12 @@ Always start with what Salesforce provides:
 - Does it fit the user profile and use case?
 
 **Ground in KB atoms** - cite [KA-XXXX] throughout
+
+**UPDATE WIP after native evaluation**:
+- Record native product/solution identified
+- Capture capabilities and constraints
+- Note licensing requirements
+- Assess fit: YES/NO/PARTIAL with reasoning
 
 #### 2. Recommend Alternatives (When Native Doesn't Fit)
 
@@ -181,6 +271,12 @@ Provide **3 alternative approaches** at different complexity levels:
 - Rough timeline estimate
 - Cost considerations
 - Risk level
+
+**UPDATE WIP after alternatives analysis**:
+- Record each alternative option explored
+- Capture pros/cons for each
+- Note complexity level and timeline estimate
+- Mark which scenarios each alternative fits best
 
 #### 3. Create Comparison Matrix
 
@@ -396,6 +492,21 @@ Create a comprehensive markdown document with this structure:
 - Licensing controls feature availability
 - Object/field permissions via profiles/permission sets
 
+### Final Step: Complete and Archive WIP
+
+**After creating the final markdown document**:
+
+1. **Update WIP one last time**:
+   - Mark all steps as complete
+   - Record final document filename
+   - Add timestamp of completion
+
+2. **Archive or delete WIP**:
+   - OPTION A (recommended): Move to `archive/solution-wip-[timestamp].md` for reference
+   - OPTION B: Delete `solution-wip.md` (solution is complete and preserved in final doc)
+
+3. **Mention WIP completion in verbal summary** to user
+
 ### Verbal Summary Format
 
 After creating the document, provide a concise verbal summary:
@@ -410,16 +521,27 @@ After creating the document, provide a concise verbal summary:
 **Alternative**: [Other option] if [different constraint]
 
 📄 **Full solution design**: [filename].md
+
+✅ **WIP archived**: Session complete, work preserved.
 ```
 
 ### Example Interaction Flow
 
 **User**: "How do I create Leads offline on mobile?"
 
+**Step 0 - Check for WIP**:
+- Look for `solution-wip.md`
+- ❌ Not found → starting fresh
+- ✅ Found → read it, resume from "Current Step"
+
 **Step 1 - KB Check**:
 - Test `mcp__kb-salesforce__kb_search("test")`
 - ✅ KB available → continue
 - ❌ KB unavailable → warn, provide installation instructions, STOP
+
+**Step 1.5 - Initialize WIP**:
+- Create `solution-wip.md` with question and progress tracker
+- Mark KB check as complete
 
 **Step 2 - Clarify** (if needed):
 - Question seems clear but could use more context
@@ -432,6 +554,7 @@ mcp__kb-salesforce__kb_search("mobile offline create records Lead")
 mcp__kb-salesforce__kb_search("Field Service Mobile offline")
 mcp__kb-salesforce__kb_search("Lead creation mobile app")
 ```
+- **UPDATE WIP**: Record searches and top atom IDs
 
 **Step 4 - Retrieve Atoms**:
 ```
@@ -439,18 +562,23 @@ mcp__kb-salesforce__kb_get("KA-1940")  # Lead creation pattern
 mcp__kb-salesforce__kb_get("KA-1986")  # FSM offline capabilities
 mcp__kb-salesforce__kb_get("KA-0422")  # FSM constraints
 ```
+- **UPDATE WIP**: Add atom summaries and key findings
 
 **Step 5 - Synthesize**:
 - Native: Field Service Mobile with Lead flow [KA-1940]
 - Limitation: Requires FSM license, designed for field techs
 - Alternatives: Skuid Mobile, FormAssembly, Custom PWA
+- **UPDATE WIP**: Record native solution evaluation and alternatives
 
 **Step 6 - Document**:
 - Create `mobile-offline-lead-creation-solution.md`
 - Include all sections per template
 - Cite KB atoms throughout
+- **UPDATE WIP**: Mark document as complete, record filename
 
-**Step 7 - Summarize**:
+**Step 7 - Archive WIP and Summarize**:
+- Move WIP to `archive/solution-wip-[timestamp].md`
+- Provide verbal summary
 "**Key Finding**: Native Salesforce offline Lead creation requires Field Service Mobile, which is designed for field service technicians, not general sales users.
 
 **Recommended Approach**: For sales reps without Field Service, use Skuid Mobile (medium complexity) or custom PWA (high flexibility).
@@ -461,16 +589,19 @@ mcp__kb-salesforce__kb_get("KA-0422")  # FSM constraints
 
 ## Common Pitfalls to Avoid
 
-1. **Proceeding without KB access** - ALWAYS check KB availability first
-2. **Skipping `/grill-me` on vague questions** - Clarify before researching
-3. **Single KB search** - Use multiple varied searches for comprehensive coverage
-4. **Ignoring "When NOT to apply"** - KB atoms include constraints; surface them
-5. **Recommending without KB grounding** - Every claim needs [KA-XXXX] citation
-6. **Native solution bias** - Sometimes 3rd party IS the right answer
-7. **Missing licensing discussion** - Licensing often determines feasibility
-8. **Shallow alternatives** - Each alternative needs proper pros/cons/timeline/risk
-9. **No scenario recommendations** - Different users need different solutions
-10. **Forgetting the document** - Verbal summary alone isn't enough; create the markdown
+1. **Not checking for existing WIP** - ALWAYS check for `solution-wip.md` first before starting
+2. **Proceeding without KB access** - ALWAYS check KB availability first
+3. **Skipping `/grill-me` on vague questions** - Clarify before researching
+4. **Single KB search** - Use multiple varied searches for comprehensive coverage
+5. **Ignoring "When NOT to apply"** - KB atoms include constraints; surface them
+6. **Recommending without KB grounding** - Every claim needs [KA-XXXX] citation
+7. **Native solution bias** - Sometimes 3rd party IS the right answer
+8. **Missing licensing discussion** - Licensing often determines feasibility
+9. **Shallow alternatives** - Each alternative needs proper pros/cons/timeline/risk
+10. **No scenario recommendations** - Different users need different solutions
+11. **Forgetting the document** - Verbal summary alone isn't enough; create the markdown
+12. **Not updating WIP during session** - Update WIP after each major step for interruption resilience
+13. **Not archiving WIP when complete** - Preserve work trail for reference
 
 ---
 
@@ -478,9 +609,12 @@ mcp__kb-salesforce__kb_get("KA-0422")  # FSM constraints
 
 A successful solution design includes:
 
+✅ Checked for existing WIP file at session start
+✅ WIP file created or updated at start of session
 ✅ KB access verified (or user warned and stopped)
 ✅ Requirements clarified (via `/grill-me` if needed)
 ✅ Comprehensive KB search (3+ searches, 3-5 atoms retrieved)
+✅ WIP updated after each major step (KB search, atom retrieval, analysis)
 ✅ Native Salesforce solution evaluated with KB citations
 ✅ 3 alternatives provided (low/medium/high complexity)
 ✅ Comparison matrix created
@@ -488,7 +622,8 @@ A successful solution design includes:
 ✅ Risk assessment for each option
 ✅ Implementation roadmap
 ✅ Complete markdown document saved
-✅ Concise verbal summary provided
+✅ WIP archived or deleted upon completion
+✅ Concise verbal summary provided (mentioning WIP completion)
 
 ---
 
@@ -501,3 +636,250 @@ Examples:
 - `real-time-integration-external-system-solution.md`
 - `customer-portal-experience-cloud-solution.md`
 - `field-service-mobile-custom-object-solution.md`
+
+Archive WIP as: `archive/solution-wip-[YYYY-MM-DD-HHMM].md`
+
+---
+
+## WIP File Template
+
+Use this structure for `solution-wip.md`:
+
+```markdown
+# Solution Design WIP
+
+**Question**: [Original user question]
+**Started**: [ISO timestamp]
+**Last Updated**: [ISO timestamp]
+**Current Step**: [Step number and name]
+
+---
+
+## Progress Summary
+
+- [x] Step 0: Check for existing WIP
+- [x] Step 1: KB prerequisite check - PASSED
+- [x] Step 2: Initialize WIP file
+- [ ] Step 3: Requirements clarification (IN PROGRESS)
+- [ ] Step 4: KB comprehensive search
+- [ ] Step 5: Retrieve KB atoms
+- [ ] Step 6: Analyze native solution
+- [ ] Step 7: Evaluate alternatives
+- [ ] Step 8: Create documentation
+- [ ] Step 9: Archive WIP and summarize
+
+---
+
+## Requirements Context
+
+### Original Question
+[User's exact question]
+
+### Clarifications Obtained
+[If /grill-me used or clarifications asked]
+- User profile: [e.g., field service technicians, sales reps]
+- Use case: [e.g., offline Lead creation in disconnected areas]
+- Constraints: [e.g., no connectivity, must sync later]
+- Success criteria: [what "working" means to the user]
+
+---
+
+## Research Findings
+
+### KB Searches Performed
+
+#### Search 1
+**Keywords**: "mobile offline create records Lead"
+**Results**: KA-1940, KA-1986, KA-0422, KA-1855, KA-0301
+**Top candidates**: KA-1940, KA-1986
+
+#### Search 2
+**Keywords**: "Field Service Mobile offline capabilities"
+**Results**: KA-1986, KA-0422, KA-1120
+**Top candidates**: KA-1986 (already noted), KA-0422
+
+#### Search 3
+**Keywords**: "Lead creation mobile app"
+**Results**: KA-1940, KA-0733, KA-0855
+**Top candidates**: KA-1940 (already noted)
+
+### KB Atoms Retrieved
+
+#### [KA-1940]: Lead Creation in FSM
+**What it says**: Field Service Mobile supports offline Lead creation via Screen Flows configured in Briefcase Builder.
+
+**When to apply**: When field technicians need to create Leads while disconnected from network.
+
+**When NOT to apply**: Not suitable for general sales users (FSM license required); not designed for high-volume Lead creation.
+
+**Key constraints**:
+- Requires Field Service Mobile license
+- Must configure Briefcase Builder
+- Screen Flow only (no triggers, no record-triggered flows)
+- FIFO sync queue
+
+#### [KA-1986]: FSM Offline Capabilities
+**What it says**: [Summary]
+
+**When to apply**: [Scenario]
+
+**When NOT to apply**: [Constraints]
+
+#### [KA-0422]: FSM Limitations
+**What it says**: [Summary]
+
+---
+
+## Architecture Decisions
+
+### Native Solution: Field Service Mobile
+
+**Product**: Field Service Mobile (FSM)
+
+**Capabilities**:
+- Full offline CRUD for configured objects (including Lead)
+- Screen Flow execution offline
+- Local storage with background sync
+- Conflict resolution (last-write-wins)
+
+**Constraints**:
+- FSM license required (~$50-75/user/month)
+- Designed for field service technicians, not general sales users
+- Requires Briefcase Builder configuration
+- Only Screen Flows execute offline (not triggers, not record-triggered flows)
+- Sync queue is FIFO (no priority control)
+
+**Licensing**: Field Service add-on license per user
+
+**Fits use case?**: PARTIAL
+- ✅ YES for field techs with FSM already
+- ❌ NO for general sales users (wrong license, wrong UX)
+
+### Alternative 1: Skuid Mobile (Medium Complexity)
+
+**Approach**: Low-code mobile app platform with offline sync
+
+**Best for**: Sales/service users needing offline without FSM investment
+
+**Pros**:
+- Designed for general mobile use cases (not field service specific)
+- Offline-first architecture
+- Declarative UI builder
+- Works with standard Salesforce licenses
+- Can be branded/customized
+
+**Cons**:
+- Additional licensing cost (~$30-40/user/month)
+- Requires Skuid platform knowledge
+- Some dev work for complex logic
+- 3rd party dependency
+
+**Timeline**: 4-6 weeks for MVP
+
+**Cost**: License + implementation
+
+**Risk**: Medium - 3rd party platform dependency
+
+### Alternative 2: Custom Progressive Web App (High Complexity)
+
+**Approach**: Custom mobile web app using Service Workers for offline capability
+
+**Best for**: Unique requirements, full control needed, existing dev team
+
+**Pros**:
+- Full control over UX and logic
+- No additional per-user licensing (just standard Salesforce)
+- Can integrate with other systems
+- Custom branding
+
+**Cons**:
+- Significant development effort
+- Requires mobile dev expertise
+- Ongoing maintenance burden
+- Longer timeline
+
+**Timeline**: 12-16 weeks for MVP
+
+**Cost**: Development team (internal or contractor)
+
+**Risk**: High - custom code, maintenance, mobile expertise needed
+
+### Alternative 3: FormAssembly Mobile (Low Complexity)
+
+**Approach**: [To be completed]
+
+---
+
+## Comparison Matrix
+
+| Criteria | Native (FSM) | Skuid Mobile | Custom PWA | FormAssembly |
+|----------|--------------|--------------|------------|--------------|
+| Offline CRUD | ✅ Full | ✅ Full | ✅ Full | ⚠️ Forms only |
+| User Fit | Field techs | Sales/service | Any | Lead capture |
+| Licensing | FSM required | Skuid + SF | SF only | FormAssembly + SF |
+| Complexity | Medium config | Medium low-code | High custom | Low config |
+| Timeline | 2-4 weeks | 4-6 weeks | 12-16 weeks | 1-2 weeks |
+| Risk | Low | Medium | High | Low |
+
+---
+
+## Scenario Recommendations
+
+### Scenario 1: Field Service Technicians (Already Have FSM)
+**Recommended**: Native FSM solution
+**Rationale**: Already licensed, designed for this use case, lowest implementation effort
+
+### Scenario 2: General Sales Users (No FSM)
+**Recommended**: Skuid Mobile (if budget allows) OR Custom PWA (if dev team available)
+**Rationale**: FSM wrong fit; Skuid faster than custom; PWA if full control needed
+
+### Scenario 3: Simple Lead Capture Only
+**Recommended**: FormAssembly Mobile
+**Rationale**: Lowest cost and fastest implementation for forms-only use case
+
+---
+
+## Risk Assessment
+
+### FSM Risks
+- **Medium**: User adoption if FSM UX doesn't match sales workflows
+- **Low**: Technical implementation (well-documented pattern)
+
+### Skuid Risks
+- **Medium**: 3rd party dependency
+- **Low**: Implementation (low-code platform)
+
+### Custom PWA Risks
+- **High**: Development timeline and cost overruns
+- **High**: Mobile expertise availability
+- **Medium**: Ongoing maintenance burden
+
+---
+
+## Next Steps
+
+- [x] Complete KB searches for core capability
+- [x] Retrieve top 3 KB atoms (KA-1940, KA-1986, KA-0422)
+- [x] Evaluate native FSM solution
+- [x] Analyze Skuid and PWA alternatives
+- [ ] Complete FormAssembly alternative evaluation
+- [ ] Finalize comparison matrix
+- [ ] Write scenario recommendations section
+- [ ] Create final markdown document: `mobile-offline-lead-creation-solution.md`
+- [ ] Archive this WIP file
+- [ ] Provide verbal summary
+
+---
+
+## Notes & Open Questions
+
+- Need to confirm: Does user already have FSM licenses? (Affects recommendation)
+- Assumption: "Offline" means zero connectivity, not just poor connectivity
+- Assumption: Sync can happen hours/days later (not near-real-time requirement)
+- Validate: What is acceptable conflict resolution strategy? (last-write-wins OK?)
+
+---
+
+**Session State**: ACTIVE
+**Completion**: ~75% (awaiting final alternative details and document creation)
+```
