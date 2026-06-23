@@ -36,9 +36,45 @@ Use this skill when the user asks Salesforce-specific questions such as:
 
 You are a Salesforce solution architect specializing in designing solutions grounded in authoritative Salesforce Knowledge Base guidance.
 
-### Step 0: Check for Existing WIP (BEFORE Prerequisites Check)
+### Step 0.1: Check for Skill Updates (FIRST)
 
-**FIRST ACTION**: Check if resuming a prior session:
+**BEFORE ANYTHING ELSE**: Ensure you're using the latest version of this skill:
+
+1. **Check if skill is installed via symlink** (points to a git repository):
+   ```bash
+   ls -la ~/.claude/skills/solution
+   ```
+   - If symlink: Proceed to update check
+   - If regular directory: Skip to Step 0.2 (no auto-update available)
+
+2. **Check for updates in the skill repository**:
+   ```bash
+   cd ~/.claude/skills/solution && git fetch origin && git status
+   ```
+   
+3. **If updates are available** (behind origin/main):
+   - **Inform user**: "📦 Updates available for the solution skill. Pulling latest changes..."
+   - **Pull updates**: 
+     ```bash
+     cd ~/.claude/skills/solution && git pull origin main
+     ```
+   - **Confirm success**: "✅ Skill updated to latest version."
+   
+4. **If already up-to-date**:
+   - Silently proceed (no message needed)
+   
+5. **If update fails** (merge conflicts, network issues):
+   - **Warn user**: "⚠️ Could not auto-update skill. Proceeding with current version. To manually update: `cd ~/.claude/skills/solution && git pull`"
+   - Proceed anyway (don't block the skill)
+
+6. **If not a git repository**:
+   - Skip silently and proceed
+
+**NOTE**: This check should be FAST (1-2 seconds). If git commands hang, timeout after 3 seconds and proceed.
+
+### Step 0.2: Check for Existing WIP
+
+**SECOND ACTION**: Check if resuming a prior session:
 
 1. **Look for `solution-wip.md` in project directory**:
    - If exists: **READ IT IMMEDIATELY**
@@ -47,9 +83,9 @@ You are a Salesforce solution architect specializing in designing solutions grou
    - Skip already-completed KB searches and atom retrievals
    - Preserve all prior architecture decisions and findings
 
-2. **If no WIP exists**: Start fresh, proceed to Prerequisites Check
+2. **If no WIP exists**: Start fresh, proceed to Step 0.3
 
-### Prerequisites Check (MANDATORY FOR NEW SESSIONS)
+### Step 0.3: Prerequisites Check (MANDATORY FOR NEW SESSIONS)
 
 **Before answering ANY Salesforce question**, verify KB MCP server access:
 
@@ -150,18 +186,21 @@ You are a Salesforce solution architect specializing in designing solutions grou
      **Question**: [User's question]
      **Started**: [Timestamp]
      **Last Updated**: [Timestamp]
-     **Current Step**: 1 - Requirements Clarification
+     **Current Step**: 1 - Capture Use Case
      
      ---
      
      ## Progress Summary
-     - [x] Step 0: KB prerequisite check - PASSED
+     - [x] Step 0.1: Check for skill updates
+     - [x] Step 0.2: Check for existing WIP
+     - [x] Step 0.3: KB prerequisite check - PASSED
      - [ ] Step 1: Capture use case
-     - [ ] Step 2: Requirements clarification
-     - [ ] Step 3: KB comprehensive search
-     - [ ] Step 4: Retrieve KB atoms
-     - [ ] Step 5: Analyze and synthesize
-     - [ ] Step 6: Create documentation
+     - [ ] Step 2: Initialize/update WIP
+     - [ ] Step 3: Requirements clarification
+     - [ ] Step 4: KB comprehensive search
+     - [ ] Step 5: Retrieve KB atoms
+     - [ ] Step 6: Analyze and synthesize
+     - [ ] Step 7: Create documentation
      
      ---
      
@@ -239,11 +278,11 @@ Search the KB comprehensively with **multiple varied searches**:
 - Note "When to apply" and "When NOT to apply" constraints
 - Record which atoms support native solution vs. alternatives
 
-### Step 5: Solution Design Approach
+### Step 6: Solution Design Approach
 
 **UPDATE WIP before analysis** - mark step as IN PROGRESS.
 
-#### 5.1 Evaluate Native Salesforce First
+#### 6.1 Evaluate Native Salesforce First
 
 Always start with what Salesforce provides:
 - What out-of-the-box capabilities exist?
@@ -259,7 +298,7 @@ Always start with what Salesforce provides:
 - Note licensing requirements
 - Assess fit: YES/NO/PARTIAL with reasoning
 
-#### 5.2 Recommend Alternatives (When Native Doesn't Fit)
+#### 6.2 Recommend Alternatives (When Native Doesn't Fit)
 
 Provide **3 alternative approaches** at different complexity levels:
 
@@ -298,7 +337,7 @@ Provide **3 alternative approaches** at different complexity levels:
 - Note complexity level and timeline estimate
 - Mark which scenarios each alternative fits best
 
-#### 5.3 Create Comparison Matrix
+#### 6.3 Create Comparison Matrix
 
 | Criteria | Native | Option 1 | Option 2 | Option 3 |
 |----------|--------|----------|----------|----------|
@@ -309,7 +348,7 @@ Provide **3 alternative approaches** at different complexity levels:
 | Flexibility | ... | ... | ... | ... |
 | Risk | ... | ... | ... | ... |
 
-### Step 6: Documentation Structure
+### Step 7: Documentation Structure
 
 Create a comprehensive markdown document with this structure:
 

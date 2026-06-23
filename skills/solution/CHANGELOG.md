@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Root-level README.md for repository overview
 - CONTRIBUTING.md with detailed contribution workflow
 - LICENSE file for proprietary software
+- **Step 0.1: Check for Skill Updates** - Automatically checks for and pulls updates from git repository before running
 - **Step 1: Capture Use Case** - Skill now prompts for use case if invoked without context (e.g., `/solution` alone)
 
 ### Planned
