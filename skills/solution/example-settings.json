@@ -1,0 +1,19 @@
+{
+  "description": "Example project settings for Salesforce Solution Design skill (/solution)",
+  "permissions": {
+    "allow": [
+      "Bash(python3 *)",
+      "Bash(npx skills@latest *)",
+      "mcp__kb-salesforce__kb_search",
+      "mcp__kb-salesforce__kb_get"
+    ]
+  },
+  "notes": [
+    "Copy this to your project's .claude/settings.local.json",
+    "These permissions allow the skill to:",
+    "  - Run KB sync scripts (python3)",
+    "  - Install additional skills (npx)",
+    "  - Search Salesforce Knowledge Base (kb_search)",
+    "  - Retrieve KB atom details (kb_get)"
+  ]
+}

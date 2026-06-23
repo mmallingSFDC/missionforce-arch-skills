@@ -1,0 +1,59 @@
+{
+  "name": "@salesforce-internal/solution",
+  "version": "1.0.0",
+  "description": "Claude Code skill for designing Salesforce solutions grounded in Knowledge Base guidance",
+  "main": "skill.md",
+  "scripts": {
+    "install": "./install.sh"
+  },
+  "keywords": [
+    "claude-code",
+    "skill",
+    "salesforce",
+    "solution-design",
+    "architecture",
+    "knowledge-base",
+    "mcp"
+  ],
+  "author": "Salesforce Solution Architects",
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/salesforce-internal/[your-repo]"
+  },
+  "bugs": {
+    "url": "https://github.com/salesforce-internal/[your-repo]/issues"
+  },
+  "homepage": "https://github.com/salesforce-internal/[your-repo]#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "peerDependencies": {
+    "claude-code": "*"
+  },
+  "files": [
+    "skill.md",
+    "README.md",
+    "example-settings.json",
+    "install.sh"
+  ],
+  "claudeCode": {
+    "skillType": "agent",
+    "requires": {
+      "mcpServers": ["kb-salesforce"],
+      "skills": ["grill-me"],
+      "permissions": [
+        "mcp__kb-salesforce__kb_search",
+        "mcp__kb-salesforce__kb_get",
+        "Bash(python3 *)"
+      ]
+    },
+    "tags": [
+      "salesforce",
+      "architecture",
+      "solution-design",
+      "enterprise"
+    ]
+  }
+}
