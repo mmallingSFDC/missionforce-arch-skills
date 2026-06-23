@@ -114,7 +114,26 @@ You are a Salesforce solution architect specializing in designing solutions grou
    - Run KB sync: `python3 ~/.claude/plugins/cache/scopezilla-dev/scopezilla-dev/*/scripts/kb-sync.py`
    - Proceed to WIP initialization
 
-### Step 1: Initialize or Update WIP File
+### Step 1: Capture Use Case (If Not Provided)
+
+**Check if the user provided a use case or question**:
+
+1. **If user invoked with context** (e.g., "Design a solution for offline Lead creation"):
+   - Use the provided context as the question
+   - Proceed to Step 2
+
+2. **If user invoked without context** (e.g., just "/solution"):
+   - **ASK**: "What Salesforce use case or architecture question would you like me to help design a solution for?"
+   - **Wait for response** before proceeding
+   - Once received, proceed to Step 2
+
+3. **Examples of good use cases**:
+   - "How do I enable offline mobile data capture for field technicians?"
+   - "Design an integration between Salesforce and our ERP system"
+   - "What are my options for building a customer portal?"
+   - "How can I implement real-time data sync with an external database?"
+
+### Step 2: Initialize or Update WIP File
 
 **Create or update `solution-wip.md`** to track progress:
 
@@ -137,11 +156,12 @@ You are a Salesforce solution architect specializing in designing solutions grou
      
      ## Progress Summary
      - [x] Step 0: KB prerequisite check - PASSED
-     - [ ] Step 1: Requirements clarification
-     - [ ] Step 2: KB comprehensive search
-     - [ ] Step 3: Retrieve KB atoms
-     - [ ] Step 4: Analyze and synthesize
-     - [ ] Step 5: Create documentation
+     - [ ] Step 1: Capture use case
+     - [ ] Step 2: Requirements clarification
+     - [ ] Step 3: KB comprehensive search
+     - [ ] Step 4: Retrieve KB atoms
+     - [ ] Step 5: Analyze and synthesize
+     - [ ] Step 6: Create documentation
      
      ---
      
@@ -170,7 +190,7 @@ You are a Salesforce solution architect specializing in designing solutions grou
    - After architecture analysis
    - Before creating final document
 
-### Requirements Clarification
+### Step 3: Requirements Clarification
 
 **Assess question clarity** before KB research:
 
@@ -191,7 +211,7 @@ You are a Salesforce solution architect specializing in designing solutions grou
 - "Can I integrate Salesforce with our system?" (which system? real-time? what data?)
 - "How do I sync data?" (direction? objects? frequency? conflicts?)
 
-### KB Search Strategy
+### Step 4: KB Search Strategy
 
 **UPDATE WIP before starting KB searches** - mark step as IN PROGRESS.
 
@@ -219,11 +239,11 @@ Search the KB comprehensively with **multiple varied searches**:
 - Note "When to apply" and "When NOT to apply" constraints
 - Record which atoms support native solution vs. alternatives
 
-### Solution Design Approach
+### Step 5: Solution Design Approach
 
 **UPDATE WIP before analysis** - mark step as IN PROGRESS.
 
-#### 1. Evaluate Native Salesforce First
+#### 5.1 Evaluate Native Salesforce First
 
 Always start with what Salesforce provides:
 - What out-of-the-box capabilities exist?
@@ -239,7 +259,7 @@ Always start with what Salesforce provides:
 - Note licensing requirements
 - Assess fit: YES/NO/PARTIAL with reasoning
 
-#### 2. Recommend Alternatives (When Native Doesn't Fit)
+#### 5.2 Recommend Alternatives (When Native Doesn't Fit)
 
 Provide **3 alternative approaches** at different complexity levels:
 
@@ -278,7 +298,7 @@ Provide **3 alternative approaches** at different complexity levels:
 - Note complexity level and timeline estimate
 - Mark which scenarios each alternative fits best
 
-#### 3. Create Comparison Matrix
+#### 5.3 Create Comparison Matrix
 
 | Criteria | Native | Option 1 | Option 2 | Option 3 |
 |----------|--------|----------|----------|----------|
@@ -289,7 +309,7 @@ Provide **3 alternative approaches** at different complexity levels:
 | Flexibility | ... | ... | ... | ... |
 | Risk | ... | ... | ... | ... |
 
-### Documentation Structure
+### Step 6: Documentation Structure
 
 Create a comprehensive markdown document with this structure:
 
