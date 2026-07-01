@@ -43,6 +43,10 @@ temp/
 # Testing
 coverage/
 .nyc_output/
+test/
+tests/
+*/test/
+*/tests/
 
 # Build outputs
 dist/

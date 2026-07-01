@@ -183,6 +183,12 @@ ln -s "$(pwd)/missionforce-arch-skills/skills/solution" ~/.claude/skills/solutio
 cp -r skills/solution /path/to/your-project/.claude/skills/
 ```
 
+### Auto-Update
+
+This repository includes a **SessionStart hook** that automatically checks for updates when you start a Claude Code session. No manual update commands needed — skills are always current.
+
+📖 See [docs/AUTO-UPDATE.md](docs/AUTO-UPDATE.md) for details on how it works.
+
 ### Configuration
 
 Add to `.claude/settings.json` or project `.claude/settings.local.json`:

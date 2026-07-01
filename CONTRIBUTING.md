@@ -123,10 +123,12 @@ skills/
     ├── skill.md              # Agent instructions (main file)
     ├── README.md             # User documentation
     ├── CHANGELOG.md          # Version history
-    ├── package.json          # npm metadata
-    ├── install.sh            # Installation script
-    └── example-settings.json # Permissions template
+    ├── package.json          # npm metadata + claudeCode config
+    ├── install.sh            # Installation script (optional)
+    └── example-settings.json # Permissions template (optional)
 ```
+
+**Important**: Do NOT add update check logic to individual skills. The repository uses a centralized `SessionStart` hook that auto-updates all skills before execution. See [docs/AUTO-UPDATE.md](docs/AUTO-UPDATE.md) for details.
 
 **Key Files to Update**:
 1. **`skill.md`** - Agent instructions (always update this)
