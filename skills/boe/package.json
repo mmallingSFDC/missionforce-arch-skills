@@ -1,0 +1,20 @@
+{
+  "name": "boe",
+  "version": "1.2.0",
+  "description": "Generate Basis of Estimate XLSX (Excel) from Salesforce scope documents using /solution skill",
+  "main": "SKILL.md",
+  "keywords": [
+    "salesforce",
+    "basis-of-estimate",
+    "boe",
+    "estimation",
+    "scoping",
+    "epic-decomposition",
+    "solution-architecture"
+  ],
+  "author": "Matt Malling",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {}
+}
