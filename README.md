@@ -47,6 +47,30 @@ Design comprehensive Salesforce solutions grounded in Knowledge Base guidance.
 
 ---
 
+### [Basis of Estimate (BoE) Generator](skills/boe/)
+
+Generate structured Basis of Estimate XLSX (Excel) spreadsheets from Salesforce scope documents.
+
+**Use when**:
+- "Create a BoE from [folder/documents]"
+- "Generate a Basis of Estimate"
+- "Estimate this scope"
+- "Create an Epic breakdown for [project]"
+
+**What it does**:
+1. ✅ Validates `/solution` skill access (required dependency)
+2. 📂 Gathers and reads scope documents from specified folder
+3. 🏗️ Designs Salesforce solution using `/solution` skill
+4. 📦 Breaks down solution into estimable Epics
+5. 📊 Generates XLSX with 7 columns: Scope/Workstream, Epic Summary, Epic Description, Estimated Points, In/Out, Assumptions, Notes
+6. ⚠️ Flags uncertainties and assumptions explicitly
+
+**Output**: XLSX Basis of Estimate file ready for estimation and client delivery.
+
+📖 [Full Documentation](skills/boe/README.md)
+
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -88,6 +112,12 @@ ln -s "$(pwd)/missionforce-arch-skills/skills/solution" ~/.claude/skills/solutio
 # Copy skill to a specific project
 cp -r skills/solution /path/to/your-project/.claude/skills/
 ```
+
+### Auto-Update
+
+This repository includes a **SessionStart hook** that automatically checks for updates when you start a Claude Code session. No manual update commands needed — skills are always current.
+
+📖 See [docs/AUTO-UPDATE.md](docs/AUTO-UPDATE.md) for details on how it works.
 
 ### Configuration
 
