@@ -551,24 +551,70 @@ Create a comprehensive markdown document with this structure:
 - Licensing controls feature availability
 - Object/field permissions via profiles/permission sets
 
+### Step 8: Generate Structured JSON Output
+
+**ALWAYS create `solution-data.json`** alongside the markdown document for programmatic consumption by other skills (e.g., `/boe`).
+
+**Location**: Save in the same directory as the markdown solution document.
+
+**Filename**: `solution-data.json`
+
+**Schema**: Follow the structure defined in `solution-data-schema.json` (see skills/solution directory)
+
+**Required fields**:
+- `question`: Original user question
+- `date`: Today's date (YYYY-MM-DD)
+- `native_solution`: Native Salesforce solution evaluation
+- `epics`: Epic-level breakdown of implementation work
+
+**Optional but recommended fields**:
+- `alternatives`: 3 alternative solutions (low/medium/high complexity)
+- `recommendations`: Scenario-based recommendations
+- `implementation_phases`: High-level roadmap
+- `kb_references`: All KB atoms referenced
+- `risk_assessment`: High/medium/low risks
+- `metadata`: Info about the design process
+
+**Epic Structure for BoE Compatibility**:
+
+Each epic in the `epics` array should include:
+- `epic_id`: E01, E02, etc.
+- `workstream`: MVP, Phase 1, Core 1, etc.
+- `summary`: Short epic name (5-15 words)
+- `description`: Detailed paragraph (100-300 words)
+- `assumptions`: Array of assumption strings (one per line in BoE)
+- `notes`: Array of note strings (rationale, references)
+- `solution_approach`: Technical approach
+- `complexity_drivers`: What makes it complex
+- `skills_needed`: Array of role/skill strings
+- `risks`: Array of risk strings
+- `kb_references`: Array of KA-XXXX strings
+
+**After generating JSON, validate it**:
+```bash
+# Optional: Validate against schema if jq or python available
+python3 -c "import json; json.load(open('solution-data.json'))" && echo "✅ Valid JSON"
+```
+
 ### Final Step: Complete and Archive WIP
 
-**After creating the final markdown document**:
+**After creating the final markdown document AND JSON**:
 
 1. **Update WIP one last time**:
    - Mark all steps as complete
    - Record final document filename
+   - Record JSON filename
    - Add timestamp of completion
 
 2. **Archive or delete WIP**:
    - OPTION A (recommended): Move to `archive/solution-wip-[timestamp].md` for reference
    - OPTION B: Delete `solution-wip.md` (solution is complete and preserved in final doc)
 
-3. **Mention WIP completion in verbal summary** to user
+3. **Mention WIP completion and JSON output in verbal summary** to user
 
 ### Verbal Summary Format
 
-After creating the document, provide a concise verbal summary:
+After creating the markdown document and JSON, provide a concise verbal summary:
 
 ```
 **Key Finding**: [1-2 sentence conclusion]
@@ -579,7 +625,9 @@ After creating the document, provide a concise verbal summary:
 
 **Alternative**: [Other option] if [different constraint]
 
-📄 **Full solution design**: [filename].md
+📄 **Outputs**:
+- Solution design: [filename].md
+- Structured data: solution-data.json (for /boe and other skills)
 
 ✅ **WIP archived**: Session complete, work preserved.
 ```
@@ -635,14 +683,22 @@ mcp__kb-salesforce__kb_get("KA-0422")  # FSM constraints
 - Cite KB atoms throughout
 - **UPDATE WIP**: Mark document as complete, record filename
 
-**Step 7 - Archive WIP and Summarize**:
+**Step 7 - Generate JSON**:
+- Create `solution-data.json` with structured data
+- Include epics array for BoE compatibility
+- Validate JSON syntax
+- **UPDATE WIP**: Mark JSON as complete
+
+**Step 8 - Archive WIP and Summarize**:
 - Move WIP to `archive/solution-wip-[timestamp].md`
 - Provide verbal summary
 "**Key Finding**: Native Salesforce offline Lead creation requires Field Service Mobile, which is designed for field service technicians, not general sales users.
 
 **Recommended Approach**: For sales reps without Field Service, use Skuid Mobile (medium complexity) or custom PWA (high flexibility).
 
-📄 **Full solution design**: mobile-offline-lead-creation-solution.md"
+📄 **Outputs**:
+- Solution design: mobile-offline-lead-creation-solution.md
+- Structured data: solution-data.json (for /boe and other skills)"
 
 ---
 
@@ -681,8 +737,9 @@ A successful solution design includes:
 ✅ Risk assessment for each option
 ✅ Implementation roadmap
 ✅ Complete markdown document saved
+✅ **Structured JSON output saved (`solution-data.json`) with epics array**
 ✅ WIP archived or deleted upon completion
-✅ Concise verbal summary provided (mentioning WIP completion)
+✅ Concise verbal summary provided (mentioning both markdown and JSON outputs)
 
 ---
 

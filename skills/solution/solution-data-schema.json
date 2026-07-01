@@ -1,0 +1,354 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Solution Design Data",
+  "description": "Structured output from /solution skill for programmatic consumption by other skills (e.g., /boe)",
+  "type": "object",
+  "required": ["question", "date", "native_solution", "epics"],
+  "properties": {
+    "question": {
+      "type": "string",
+      "description": "The original question or use case that was analyzed"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the solution was designed (YYYY-MM-DD)"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "Optional project name or identifier"
+    },
+    "native_solution": {
+      "type": "object",
+      "description": "The native Salesforce solution evaluated",
+      "required": ["name", "products", "fit_assessment"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the native solution (e.g., 'Field Service Mobile with Offline Briefcase')"
+        },
+        "products": {
+          "type": "array",
+          "description": "Salesforce products/clouds involved",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["Service Cloud", "Experience Cloud", "Agentforce"]]
+        },
+        "components": {
+          "type": "array",
+          "description": "Architecture components in the solution",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Component name (e.g., 'Case Management', 'Self-Service Portal')"
+              },
+              "description": {
+                "type": "string",
+                "description": "What this component does"
+              },
+              "kb_references": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^KA-[0-9]{4}$"
+                },
+                "description": "KB atom IDs that support this component"
+              }
+            }
+          }
+        },
+        "capabilities": {
+          "type": "array",
+          "description": "Key capabilities provided",
+          "items": {
+            "type": "string"
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "description": "Limitations or 'When NOT to use' conditions",
+          "items": {
+            "type": "string"
+          }
+        },
+        "licensing": {
+          "type": "array",
+          "description": "Required licenses",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fit_assessment": {
+          "type": "string",
+          "enum": ["YES", "PARTIAL", "NO"],
+          "description": "Does the native solution fit the use case?"
+        },
+        "fit_rationale": {
+          "type": "string",
+          "description": "Why it fits or doesn't fit"
+        }
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "description": "Alternative solutions evaluated (3 options: low/medium/high complexity)",
+      "items": {
+        "type": "object",
+        "required": ["name", "complexity", "best_for"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Alternative solution name"
+          },
+          "complexity": {
+            "type": "string",
+            "enum": ["low", "medium", "high"],
+            "description": "Complexity level"
+          },
+          "best_for": {
+            "type": "string",
+            "description": "Scenario where this alternative is best"
+          },
+          "approach": {
+            "type": "string",
+            "description": "Technical approach description"
+          },
+          "pros": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timeline": {
+            "type": "string",
+            "description": "Rough implementation timeline (e.g., '4-6 weeks')"
+          },
+          "cost": {
+            "type": "string",
+            "description": "Cost considerations"
+          },
+          "risk": {
+            "type": "string",
+            "enum": ["low", "medium", "high"],
+            "description": "Risk level"
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "Scenario-based recommendations",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": "string",
+            "description": "The scenario description"
+          },
+          "recommended_solution": {
+            "type": "string",
+            "description": "Which solution (native or alternative name)"
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Why this solution fits this scenario"
+          }
+        }
+      }
+    },
+    "epics": {
+      "type": "array",
+      "description": "Epic-level breakdown of implementation work (for BoE generation)",
+      "items": {
+        "type": "object",
+        "required": ["epic_id", "summary", "description"],
+        "properties": {
+          "epic_id": {
+            "type": "string",
+            "pattern": "^E[0-9]{2,}$",
+            "description": "Epic identifier (e.g., E01, E02)",
+            "examples": ["E01", "E02"]
+          },
+          "workstream": {
+            "type": "string",
+            "description": "Delivery phase/workstream (e.g., 'MVP', 'Core 1', 'Phase 1')"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Short epic name (5-15 words)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed epic description (100-300 words)"
+          },
+          "products": {
+            "type": "array",
+            "description": "Salesforce products used in this epic",
+            "items": {
+              "type": "string"
+            }
+          },
+          "solution_approach": {
+            "type": "string",
+            "description": "Brief technical approach for this epic"
+          },
+          "complexity_drivers": {
+            "type": "string",
+            "description": "What makes this epic complex"
+          },
+          "skills_needed": {
+            "type": "array",
+            "description": "Roles/skills required",
+            "items": {
+              "type": "string"
+            }
+          },
+          "risks": {
+            "type": "array",
+            "description": "Key risks for this epic",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "description": "Assumptions made for this epic",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "array",
+            "description": "Additional notes, rationale, or references",
+            "items": {
+              "type": "string"
+            }
+          },
+          "kb_references": {
+            "type": "array",
+            "description": "KB atoms referenced for this epic",
+            "items": {
+              "type": "string",
+              "pattern": "^KA-[0-9]{4}$"
+            }
+          },
+          "in_out": {
+            "type": "string",
+            "enum": ["In", "Out", "TBD"],
+            "description": "Scope decision (In/Out/TBD)"
+          },
+          "estimated_points": {
+            "type": ["integer", "null"],
+            "description": "Story points estimate (null if not estimated yet)"
+          }
+        }
+      }
+    },
+    "implementation_phases": {
+      "type": "array",
+      "description": "High-level implementation roadmap",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phase_name": {
+            "type": "string",
+            "description": "Phase name (e.g., 'Phase 1: Foundation')"
+          },
+          "timeline": {
+            "type": "string",
+            "description": "Estimated timeline"
+          },
+          "epic_ids": {
+            "type": "array",
+            "description": "Epics included in this phase",
+            "items": {
+              "type": "string",
+              "pattern": "^E[0-9]{2,}$"
+            }
+          },
+          "description": {
+            "type": "string",
+            "description": "What gets delivered in this phase"
+          }
+        }
+      }
+    },
+    "kb_references": {
+      "type": "array",
+      "description": "All KB atoms referenced in the solution",
+      "items": {
+        "type": "object",
+        "properties": {
+          "atom_id": {
+            "type": "string",
+            "pattern": "^KA-[0-9]{4}$",
+            "description": "KB atom ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Atom title"
+          },
+          "relevance": {
+            "type": "string",
+            "description": "Why this atom is relevant to the solution"
+          }
+        }
+      }
+    },
+    "risk_assessment": {
+      "type": "object",
+      "description": "Overall risk assessment",
+      "properties": {
+        "high_risks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "medium_risks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "low_risks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Metadata about the solution design process",
+      "properties": {
+        "kb_searches_performed": {
+          "type": "integer",
+          "description": "Number of KB searches executed"
+        },
+        "atoms_retrieved": {
+          "type": "integer",
+          "description": "Number of KB atoms retrieved and analyzed"
+        },
+        "clarification_used": {
+          "type": "boolean",
+          "description": "Whether /grill-me was used to clarify requirements"
+        },
+        "wip_sessions": {
+          "type": "integer",
+          "description": "Number of WIP sessions (1 if completed in one go, >1 if resumed)"
+        }
+      }
+    }
+  }
+}

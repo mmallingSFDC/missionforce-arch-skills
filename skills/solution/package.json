@@ -1,6 +1,6 @@
 {
   "name": "@salesforce-internal/solution",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Claude Code skill for designing Salesforce solutions grounded in Knowledge Base guidance",
   "main": "skill.md",
   "scripts": {

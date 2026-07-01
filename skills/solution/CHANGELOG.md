@@ -53,6 +53,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pre-authorized skills installation
 - Project-level settings template
 
+## [1.1.0] - 2026-07-01
+
+### Added
+- **Structured JSON Output** - Skill now ALWAYS generates `solution-data.json` alongside markdown documents
+- **Epic Breakdown** - JSON includes detailed `epics` array for BoE compatibility
+- **solution-data-schema.json** - Formal JSON schema definition for programmatic consumption
+- **Metadata Tracking** - JSON includes metadata about design process (KB searches, atoms retrieved, clarification used)
+
+### Changed
+- **Step 8: Generate Structured JSON Output** - New mandatory step after markdown document creation
+- **Success Criteria** - Updated to include JSON output requirement
+- **Verbal Summary** - Now mentions both markdown and JSON outputs
+- **Example Interaction Flow** - Updated to include JSON generation step
+
+### Integration
+- **BoE Skill Compatibility** - JSON output enables fast-path BoE generation without re-analysis
+- **Reusable Data** - Structured data can be consumed by roadmap, commercials, and other skills
+
+### Documentation
+- Added JSON schema documentation in skills/solution/solution-data-schema.json
+- Updated SKILL.md with JSON output workflow
+- Enhanced example interaction flow with JSON generation
+
 ## [Unreleased]
 
 ### Changed
@@ -66,7 +89,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CONTRIBUTING.md with detailed contribution workflow
 - LICENSE file for proprietary software
 - **Step 0.1: Check for Skill Updates** - Automatically checks for and pulls updates from git repository before running
+- **Step 0.2: Check for Existing WIP** - Looks for `solution-wip.md` to resume interrupted sessions
 - **Step 1: Capture Use Case** - Skill now prompts for use case if invoked without context (e.g., `/solution` alone)
+- **WIP File Management** - Comprehensive work-in-progress tracking for interruption resilience
 
 ### Planned
 - Integration with additional MCP servers (if available)

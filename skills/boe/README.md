@@ -5,10 +5,13 @@
 The **BoE** skill transforms Salesforce scope documents into structured, estimable work packages (Epics) within a Basis of Estimate XLSX (Excel) file.
 
 This skill acts as a **Salesforce Solution Architect** that:
-1. Reads client scope documents
-2. Uses the `/solution` skill to design appropriate Salesforce architecture
-3. Decomposes the solution into logical Epics
-4. Generates an XLSX BoE with Workstreams, Epic Names, Summaries, and Assumptions
+1. Checks for existing `boe-wip.md` file to resume interrupted sessions
+2. Reads client scope documents
+3. Uses `/grill-me` skill to clarify ambiguous requirements and open questions
+4. Uses `/solution` skill to design appropriate Salesforce architecture (grounded in KB)
+5. Decomposes the solution into logical Epics
+6. Generates an XLSX BoE with Workstreams, Epic Names, Summaries, and Assumptions
+7. Maintains `boe-wip.md` file throughout (updated after each step for interruption resilience)
 
 ---
 
@@ -44,7 +47,26 @@ This skill **depends on the `/solution` skill** to design Salesforce architectur
 - Provides constraints and limitations for assumptions
 - Ensures estimates are based on real Salesforce capabilities
 
-### 2. Scope Documents
+### 2. `/grill-me` Skill (RECOMMENDED)
+
+This skill **uses the `/grill-me` skill** to systematically clarify ambiguous requirements before designing solutions.
+
+**Verify `/grill-me` is available**:
+- The skill will check for `/grill-me` access at startup
+- If unavailable, it will WARN but not block (proceeds with assumptions)
+
+**Why `/grill-me` is recommended**:
+- Clarifies "open questions" and "TBD" items upfront (before estimation)
+- Reduces re-estimation risk from incorrect assumptions
+- Surfaces missing information early
+- Provides structured clarification workflow
+
+**If `/grill-me` is missing**, install it:
+```bash
+npx skills@latest add mattpocock/skills --yes
+```
+
+### 3. Scope Documents
 
 You must provide scope documents in a folder. The skill will read:
 - Markdown files (*.md)
@@ -74,15 +96,52 @@ An Excel (XLSX) file with 7 columns:
 
 ---
 
+## Interruption Resilience (WIP File)
+
+The skill maintains a **`boe-wip.md`** (work-in-progress) file throughout execution:
+
+### WIP File Purpose
+- **Resume after interruption**: If the skill times out, errors, or is cancelled, you can re-run it and it will pick up where it left off
+- **No duplicate work**: Already-completed `/solution` queries and Epics are skipped
+- **Progress tracking**: Check `boe-wip.md` at any time to see % complete and current step
+- **Audit trail**: Full record of all decisions, clarifications, and findings
+
+### How It Works
+1. **At session start**: Checks for existing `boe-wip.md`
+   - If found: Reads WIP and resumes from "Current Step"
+   - If not found: Creates new WIP and starts fresh
+2. **During execution**: Updates WIP after every major step (reading docs, clarifying ambiguities, each `/solution` query, each Epic)
+3. **At completion**: Archives WIP to `archive/boe-wip-[project]-[timestamp].md`
+
+### Example Resume Scenario
+```
+1st Run:  /boe project-folder
+          → Completes Steps 1-3, creates 5 Epics, then times out
+          → boe-wip.md saved (60% complete)
+
+2nd Run:  /boe project-folder
+          → Finds boe-wip.md
+          → Skips Steps 1-3 (already done)
+          → Resumes creating remaining Epics from Step 4
+          → Completes and generates XLSX
+```
+
+---
+
 ## How It Works
 
 ### Step-by-Step Workflow
 
-1. **Prerequisites Check**:
-   - Verify `/solution` skill is accessible
-   - Confirm scope documents location with user
+1. **Check for WIP**:
+   - Look for `boe-wip.md` to resume interrupted session
+   - If found, skip to last completed step
 
-2. **Read Scope Documents**:
+2. **Prerequisites Check**:
+   - Verify `/solution` and `/grill-me` skills are accessible
+   - Confirm scope documents location with user
+   - Create WIP file if starting fresh
+
+3. **Read Scope Documents**:
    - List all files in provided folder
    - Read each document (md, docx, pdf, txt)
    - Flag any unreadable documents

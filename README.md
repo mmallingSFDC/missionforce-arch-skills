@@ -23,7 +23,7 @@ This repository provides reusable Claude Code skills that help solution architec
 
 ## Available Skills
 
-### [Salesforce Solution Design](skills/solution/)
+### [Salesforce Solution Design](skills/solution/) `v1.1.0`
 
 Design comprehensive Salesforce solutions grounded in Knowledge Base guidance.
 
@@ -40,10 +40,104 @@ Design comprehensive Salesforce solutions grounded in Knowledge Base guidance.
 4. 📊 Evaluates native Salesforce solutions
 5. 🔀 Recommends 3 alternatives (low/medium/high complexity)
 6. 📝 Creates detailed markdown documentation
+7. **🆕 Generates structured JSON output** (`solution-data.json`) for programmatic consumption
 
-**Output**: Comprehensive solution document with executive summary, architecture, comparison matrix, scenario recommendations, risk assessment, and KB references.
+**Output**: 
+- Markdown document with executive summary, architecture, comparison matrix, recommendations
+- **JSON structured data** with epics array for BoE compatibility
 
 📖 [Full Documentation](skills/solution/README.md)
+
+---
+
+### [Basis of Estimate (BoE) Generator](skills/boe/) `v2.0.0`
+
+Generate structured Basis of Estimate XLSX (Excel) spreadsheets from solution data or scope documents.
+
+**Use when**:
+- "Create a BoE from [folder/documents]"
+- "Generate a Basis of Estimate"
+- "Estimate this scope"
+- "Convert solution to BoE"
+
+**Three input modes** (automatic detection):
+
+1. **🚀 Mode 1: From Solution JSON (FAST)** - Transforms `solution-data.json` → XLSX (~10 sec)
+2. **⚡ Mode 2: From Solution Markdown (FAST)** - Parses solution markdown → XLSX (~30 sec)
+3. **🔄 Mode 3: From Raw Scope (FULL)** - Invokes `/solution` → synthesizes → XLSX (~5-10 min)
+
+**What it does**:
+1. 🔍 Checks for `solution-data.json` (fast path)
+2. 📄 Auto-detects solution markdown documents
+3. 🏗️ Invokes `/solution` for raw scope (if needed)
+4. 📦 Breaks down into estimable Epics
+5. 📊 Generates XLSX with 7 columns: Scope/Workstream, Epic Summary, Epic Description, Estimated Points, In/Out, Assumptions, Notes
+
+**Output**: XLSX Basis of Estimate file ready for estimation and client delivery.
+
+📖 [Full Documentation](skills/boe/README.md)
+
+---
+
+## How Skills Work Together
+
+The skills are designed to complement each other with clear separation of concerns:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     User Question                            │
+│  "Design a Salesforce solution for offline case management" │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+            ┌────────────────────────┐
+            │   /solution Skill      │
+            │  (Architecture Design) │
+            └────────┬───────────────┘
+                     │
+         ┌───────────┴───────────┐
+         │                       │
+         ▼                       ▼
+┌─────────────────┐    ┌─────────────────────┐
+│  Markdown Doc   │    │  solution-data.json │ ← Structured data
+│  (Human Read)   │    │  (Machine Read)     │
+└─────────────────┘    └──────────┬──────────┘
+                                  │
+                                  │ Consumed by
+                                  ▼
+                     ┌─────────────────────────┐
+                     │     /boe Skill          │
+                     │  (BoE Formatting)       │
+                     │  • Mode 1: From JSON    │ ← Fast (10s)
+                     │  • Mode 2: From MD      │ ← Fast (30s)
+                     │  • Mode 3: From Raw     │ ← Full (5-10min)
+                     └──────────┬──────────────┘
+                                │
+                                ▼
+                       ┌─────────────────┐
+                       │  BoE XLSX File  │
+                       │  (7 columns)    │
+                       └─────────────────┘
+```
+
+**Key Benefits**:
+- ✅ `/solution` designs once, outputs are reusable
+- ✅ `solution-data.json` consumed by multiple skills (BoE, roadmap, commercials)
+- ✅ Fast paths when solution already exists
+- ✅ Each skill has one clear purpose
+
+**Example Workflow**:
+```bash
+# Step 1: Design solution
+/solution "How do I implement Experience Cloud for case management?"
+# → Creates: solution.md + solution-data.json
+
+# Step 2: Generate BoE (uses JSON automatically)
+/boe
+# → Detects solution-data.json
+# → Asks: "Use solution data (fast)?"
+# → Creates: project-boe-2026-07-01.xlsx in 10 seconds
+```
 
 ---
 

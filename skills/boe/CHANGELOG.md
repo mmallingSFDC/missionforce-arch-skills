@@ -7,6 +7,179 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.0] - 2026-07-01
+
+### 🚀 MAJOR REDESIGN - Three Input Modes
+
+**Breaking Change**: Complete skill redesign to complement `/solution` skill's new structured JSON output.
+
+#### Three Input Modes (Automatic Detection)
+
+**Mode 1: From Solution JSON (FAST PATH - NEW)**
+- Detects `solution-data.json` from prior `/solution` run
+- User confirms to use it
+- Transforms JSON directly → BoE XLSX
+- **Fastest path** - no re-analysis needed
+
+**Mode 2: From Solution Markdown (FAST PATH - NEW)**
+- Auto-detects solution markdown documents via pattern matching
+- Detection signals: `## Native Salesforce Solution:`, `[KA-XXXX]` citations, `## Alternative Solutions`, etc.
+- User confirms these are `/solution` outputs
+- Parses markdown → BoE XLSX
+- **Fast path** - minimal analysis
+
+**Mode 3: From Raw Scope (FULL ANALYSIS - REFACTORED)**
+- User provides raw scope documents
+- Skill invokes `/solution` for architecture design
+- Synthesizes responses → Epics → BoE XLSX
+- **Full workflow** - comprehensive but slower
+
+#### Key Improvements
+
+✅ **Smart input detection** - Automatically recognizes solution outputs vs. raw scope
+✅ **User control** - Always asks before assuming input mode
+✅ **Fast paths** - Leverages `/solution`'s new JSON output for instant BoE generation
+✅ **Simplified workflow** - Removed WIP file complexity (was over-engineered for the use case)
+✅ **Cleaner prerequisites** - Streamlined skill availability checking
+✅ **Better documentation** - Three example interaction flows showing each mode
+
+#### Removed (Simplification)
+
+- ❌ **WIP file management** - Removed `boe-wip.md` tracking (added complexity without clear benefit)
+- ❌ **Verbose prerequisites** - Simplified skill availability checking
+- ❌ **Multi-level resumption** - Not needed with faster workflows
+
+#### Integration with `/solution` v1.1.0
+
+This redesign depends on `/solution` v1.1.0's new feature:
+- `/solution` now ALWAYS creates `solution-data.json` with structured data
+- `solution-data.json` includes `epics` array designed for BoE compatibility
+- BoE skill can consume this JSON directly (Mode 1) for instant XLSX generation
+
+#### Migration Guide
+
+**From v1.x to v2.0**:
+- No breaking changes to XLSX output format (still 7 columns)
+- WIP files from v1.4.0 are ignored (not read)
+- If you have existing `/solution` markdown docs, skill auto-detects them (Mode 2)
+- If you have `solution-data.json`, skill offers to use it (Mode 1)
+- Otherwise, workflow is similar to v1.x (Mode 3)
+
+### Why This Redesign?
+
+**Problem**: v1.x overlapped heavily with `/solution` skill
+- Both skills were designing architecture
+- Both were breaking down epics
+- Lots of duplicate work
+
+**Solution**: Clear separation of concerns
+- `/solution` = Architecture design + structured output
+- `/boe` = BoE formatting with multiple input modes
+
+**Benefits**:
+- ⚡ **10x faster** when using Mode 1 or 2 (no re-design)
+- 🎯 **Clear roles** - `/solution` designs, `/boe` formats
+- 🔄 **Reusable data** - `solution-data.json` used by multiple skills
+- 🧩 **Better composition** - Skills complement each other cleanly
+
+---
+
+## [1.4.0] - 2026-07-01
+
+### Added - WIP File for Interruption Resilience
+
+**Critical Enhancement**: BoE skill now creates and maintains a `boe-wip.md` (work-in-progress) file to track progress and enable resumption after interruption.
+
+**New WIP File Management**:
+- **Checks for existing WIP** at session start
+  - If found: Reads WIP and resumes from "Current Step" and "Next Steps"
+  - If not found: Creates new WIP file and starts fresh
+- **Creates `boe-wip.md`** at the START of BoE generation
+- **Updates WIP after EVERY major step**:
+  - After reading scope documents (Step 1)
+  - After clarifying ambiguities via `/grill-me` (Step 2)
+  - After each `/solution` query and response (Step 3)
+  - After each Epic created (Step 4)
+  - After XLSX generation (Step 5)
+- **Archives WIP when complete**:
+  - Moves to `archive/boe-wip-[project]-[timestamp].md`
+  - OR deletes if user prefers
+
+**WIP File Contents**:
+- Project name and scope folder path
+- Progress summary (checklist of completed steps with % complete)
+- Documents read (success and failures)
+- Ambiguities identified and clarifications obtained
+- All `/solution` queries executed and their findings
+- All Epics created (with descriptions, assumptions, notes)
+- Current step in workflow
+- Next steps to complete
+- Session state (ACTIVE or COMPLETE)
+
+**Why This Change?**:
+- **Interruption resilience**: Can resume after timeout, error, or user cancellation
+- **No duplicate work**: Skips already-completed `/solution` queries and Epic creation
+- **Progress tracking**: User can see exactly where BoE generation is at any moment
+- **Audit trail**: Documents all decisions, clarifications, and findings
+- **Debugging**: If generation fails, WIP shows exactly what was attempted
+- **Follows `/solution` skill pattern**: Consistent WIP approach across skills
+
+**Resume Example**:
+```
+User runs: /boe project-folder
+Skill finds: boe-wip.md (85% complete, stopped at Step 4 - Epic creation)
+Skill resumes: Reads WIP, skips Steps 1-3, continues creating remaining Epics
+```
+
+### Changed
+- Updated "What it does" section to include WIP management (9 steps instead of 7)
+- Updated Success Criteria to include WIP checks and updates
+- Added new Step 0: Check for WIP and Resume (if applicable)
+- Each workflow step now explicitly states "Update WIP after this step"
+
+---
+
+## [1.3.0] - 2026-07-01
+
+### Added - Requirements Clarification via `/grill-me`
+
+**Critical Enhancement**: BoE skill now uses `/grill-me` skill to systematically clarify ambiguous requirements BEFORE invoking `/solution` or generating estimates.
+
+**New Step 2: Clarify Ambiguities and Open Questions**:
+- **Scans scope documents** for ambiguity signals:
+  - "Open question", "TBD", "to be determined", "pending"
+  - Multiple options presented without decision
+  - Dependencies on external inputs not yet received
+  - Conditional statements and missing critical details
+- **Uses `/grill-me` skill** to systematically resolve ambiguities through structured questioning
+- **Documents clarifications** as assumptions with attribution (e.g., "per clarification on [date]")
+- **Warns if `/grill-me` not available** but doesn't block (proceeds with assumptions flagged)
+
+**Updated Prerequisites**:
+- Now checks for BOTH `/solution` AND `/grill-me` skills
+- Offers to install `/grill-me` (via `npx skills add mattpocock/skills`) if missing
+- User can choose to proceed without `/grill-me` but all assumptions flagged prominently
+
+**Why This Change?**:
+- **Reduces re-estimation risk**: Clarifies ambiguities upfront instead of guessing
+- **Improves accuracy**: Epics sized based on clarified requirements, not assumptions
+- **Surfaces gaps early**: Identifies missing information before significant work invested
+- **Follows best practice**: Requirements clarification is standard scoping discipline
+- **Leverages skill composition**: `/boe` → `/grill-me` → `/solution` → XLSX generation
+
+**Example Ambiguities Caught**:
+- Architecture decisions not finalized (e.g., "GovSlack vs. Commercial Slack - which for Year 1?")
+- External dependencies (e.g., "MOE documentation pending - when will it arrive?")
+- Conditional scope (e.g., "Teams integration - which agencies need it?")
+- Missing context (e.g., "mobile users" - field techs or sales reps?)
+
+### Changed
+- Updated "What it does" section to include Step 3: Clarifies Ambiguities
+- Updated package.json to require `grill-me` skill (in addition to `solution`)
+- Added "requirements-clarification" tag to skill metadata
+
+---
+
 ## [1.2.0] - 2026-07-01
 
 ### Changed - Based on Real BoE Sample Analysis

@@ -1,7 +1,7 @@
 {
   "name": "boe",
-  "version": "1.2.0",
-  "description": "Generate Basis of Estimate XLSX (Excel) from Salesforce scope documents using /solution skill",
+  "version": "2.0.0",
+  "description": "Generate Basis of Estimate XLSX (Excel) from solution-data.json, solution markdown, or raw scope documents with /solution skill integration",
   "main": "skill.md",
   "keywords": [
     "salesforce",
@@ -33,7 +33,7 @@
   "claudeCode": {
     "skillType": "agent",
     "requires": {
-      "skills": ["solution"],
+      "skills": ["solution", "grill-me"],
       "permissions": [
         "Read",
         "Write",
@@ -45,7 +45,8 @@
       "estimation",
       "basis-of-estimate",
       "boe",
-      "scoping"
+      "scoping",
+      "requirements-clarification"
     ]
   },
   "dependencies": {},
