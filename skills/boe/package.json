@@ -2,7 +2,7 @@
   "name": "boe",
   "version": "1.2.0",
   "description": "Generate Basis of Estimate XLSX (Excel) from Salesforce scope documents using /solution skill",
-  "main": "SKILL.md",
+  "main": "skill.md",
   "keywords": [
     "salesforce",
     "basis-of-estimate",
@@ -14,6 +14,40 @@
   ],
   "author": "Matt Malling",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mmallingSFDC/missionforce-arch-skills"
+  },
+  "bugs": {
+    "url": "https://github.com/mmallingSFDC/missionforce-arch-skills/issues"
+  },
+  "homepage": "https://github.com/mmallingSFDC/missionforce-arch-skills#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "skill.md",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "claudeCode": {
+    "skillType": "agent",
+    "requires": {
+      "skills": ["solution"],
+      "permissions": [
+        "Read",
+        "Write",
+        "Bash(python3 *)"
+      ]
+    },
+    "tags": [
+      "salesforce",
+      "estimation",
+      "basis-of-estimate",
+      "boe",
+      "scoping"
+    ]
+  },
   "dependencies": {},
   "devDependencies": {},
   "scripts": {}
